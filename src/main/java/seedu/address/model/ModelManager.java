@@ -179,7 +179,9 @@ public class ModelManager implements Model {
         ModelManager other = (ModelManager) obj;
         return flashcardBook.equals(other.flashcardBook)
                 && userPrefs.equals(other.userPrefs)
-                && filteredFlashcards.equals(other.filteredFlashcards);
+                && filteredFlashcards.equals(other.filteredFlashcards)
+                && isQuizMode == other.isQuizMode
+                && hasCurrentAttempt == other.hasCurrentAttempt;
     }
 
     //=========== Filtered Question List Accessors =============================================================

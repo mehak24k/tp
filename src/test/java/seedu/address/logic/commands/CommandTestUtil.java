@@ -94,6 +94,40 @@ public class CommandTestUtil {
 
     /**
      * Executes the given {@code command}, confirms that <br>
+     * - the returned {@link CommandResult} matches {@code expectedCommandResult} <br>
+     * - the {@code actualModel} matches {@code expectedModel}
+     */
+    public static void assertCommandSuccessQuiz(Command command, Model actualModel, boolean isQuizMode,
+                                                boolean hasCurrentAttempt, CommandResult expectedCommandResult,
+                                                Model expectedModel) {
+        try {
+            if (isQuizMode) {
+                actualModel.flipQuizMode();
+            }
+            if (hasCurrentAttempt) {
+                actualModel.startAttempt();
+            }
+            CommandResult result = command.execute(actualModel);
+            assertEquals(expectedCommandResult, result);
+            assertEquals(expectedModel, actualModel);
+        } catch (CommandException ce) {
+            throw new AssertionError("Execution of command should not fail.", ce);
+        }
+    }
+
+    /**
+     * Convenience wrapper to {@link #assertCommandSuccessQuiz)}
+     * that takes a string {@code expectedMessage}.
+     */
+    public static void assertCommandSuccessQuiz(Command command, Model actualModel, boolean isQuizMode,
+                                                boolean hasCurrentAttempt, String expectedMessage,
+                                                Model expectedModel) {
+        CommandResult expectedCommandResult = new CommandResult(expectedMessage);
+        assertCommandSuccessQuiz(command, actualModel, isQuizMode, hasCurrentAttempt, expectedCommandResult, expectedModel);
+    }
+
+    /**
+     * Executes the given {@code command}, confirms that <br>
      * - a {@code CommandException} is thrown <br>
      * - the CommandException message matches {@code expectedMessage} <br>
      * - the address book, filtered flashcard list and selected flashcard in {@code actualModel} remain unchanged
